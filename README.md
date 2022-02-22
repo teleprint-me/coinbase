@@ -13,10 +13,12 @@
 
 ## Tasklist
 - [x] REST API
-- [x] Plugins
+    - [x] API Key Authentication
+    - [ ] OAuth2 Authentication
+    - [x] Plugin Support
 - [ ] Install
-- [ ] Quickstart Guide
 - [ ] API Documentation
+    - [ ] Quickstart Guide
 
 ## Tips
 - Bitcoin (Segwit): 397d3tB2Mr6ECBjeZH9FU1v1UMnaKc2SVt
