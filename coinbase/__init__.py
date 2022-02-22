@@ -15,10 +15,19 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 __agent__: str = "teleprint-me/coinbase"
 __source__: str = f"https://github.com/{__agent__}"
-__version__: str = "0.0.1"
-# the number of results per pagination
+__version__: str = "0.0.6"
+# the number of results per paginated request
 __page__: int = 25
-# 10,000 requests per hour / 3,600 seconds per hour
 # how many requests can we make per second?
-# 1 request / 0.36 seconds
+# we know we can make "10,000 requests per hour".
+# we know that there are "3,600 seconds per hour".
+# we need to know what "1 request per [n] seconds" is.
+#       1 request / [n] seconds
+# [n] is the number of requests we can make per second.
+#       n -> 10000 requests per hour / 3600 seconds per hour
+#       n -> [2.7...] requests / second; where [...] is repeating
+# rate limit -> 1 request / (10000 rph / 3600 rph) second
+# rate limit -> 1 request / [2.7...] second
+# rate limit -> 0.36 seconds
+# __limit__ is used to block a request for at least 0.36 seconds.
 __limit__: float = 1 / (10000 / 3600)
