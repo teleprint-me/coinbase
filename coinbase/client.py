@@ -34,7 +34,7 @@ class User(Subscriber):
 class Account(Subscriber):
     def list(self, data: dict = None) -> list:
         pages = self.messenger.page("/accounts", data)
-        return [account for page in pages for account in page.json()["data"]]
+        return [result for page in pages for result in page.json()["data"]]
 
     def get(self, account_id: str) -> dict:
         return self.messenger.get(f"/accounts/{account_id}").json()
@@ -48,16 +48,16 @@ class Account(Subscriber):
 
 class Address(Subscriber):
     def list(self, account_id: str, data: dict = None) -> list:
-        path = f"/accounts/{account_id}/addresses"
-        pages = self.messenger.page(path, data)
-        return [address for page in pages for address in page.json()["data"]]
+        pages = self.messenger.page(f"/accounts/{account_id}/addresses", data)
+        return [result for page in pages for result in page.json()["data"]]
 
     def get(self, account_id: str, address_id: str) -> dict:
         return self.messenger.get(f"/accounts/{account_id}/addresses/{address_id}")
 
     def transactions(self, account_id: str, address_id: str, data: dict = None) -> list:
-        path = f"/accounts/{account_id}/addresses/{address_id}/transactions"
-        pages = self.messenger.page(path, data)
+        pages = self.messenger.page(
+            f"/accounts/{account_id}/addresses/{address_id}/transactions", data
+        )
         return [tx for page in pages for tx in page.json()["data"]]
 
     def create(self, account_id: str, data: dict) -> dict:
@@ -66,35 +66,37 @@ class Address(Subscriber):
 
 class Transaction(Subscriber):
     def list(self, account_id: str, data: dict = None) -> list:
-        path = f"/accounts/{account_id}/transactions"
-        pages = self.messenger.page(path, data)
+        pages = self.messenger.page(f"/accounts/{account_id}/transactions", data)
         return [tx for page in pages for tx in page.json()["data"]]
 
     def get(self, account_id: str, transaction_id: str) -> dict:
-        path = f"/accounts/{account_id}/transactions/{transaction_id}"
-        return self.messenger.get(path).json()
+        return self.messenger.get(
+            f"/accounts/{account_id}/transactions/{transaction_id}"
+        ).json()
 
     def send(self, account_id: str, data: dict) -> dict:
-        path = f"/accounts/{account_id}/transactions"
-        return self.messenger.post(path, data).json()
+        return self.messenger.post(f"/accounts/{account_id}/transactions", data).json()
 
     def complete(self, account_id: str, transaction_id: str) -> dict:
-        path = f"/accounts/{account_id}/transactions/{transaction_id}/complete"
-        return self.messenger.post(path).json()
+        return self.messenger.post(
+            f"/accounts/{account_id}/transactions/{transaction_id}/complete"
+        ).json()
 
     def resend(self, account_id: str, transaction_id: str) -> dict:
-        path = f"/accounts/{account_id}/transactions/{transaction_id}/resend"
-        return self.messenger.post(path).json()
+        return self.messenger.post(
+            f"/accounts/{account_id}/transactions/{transaction_id}/resend"
+        ).json()
 
     def cancel(self, account_id: str, transaction_id: str) -> dict:
-        path = f"/accounts/{account_id}/transactions/{transaction_id}"
-        return self.messenger.delete(path).json()
+        return self.messenger.delete(
+            f"/accounts/{account_id}/transactions/{transaction_id}"
+        ).json()
 
 
 class Buy(Subscriber):
     def list(self, account_id: str, data: dict = None) -> list:
         pages = self.messenger.page(f"/accounts/{account_id}/buys", data)
-        return [buy for page in pages for buy in page.json()["data"]]
+        return [result for page in pages for result in page.json()["data"]]
 
     def get(self, account_id: str, buy_id: str) -> dict:
         return self.messenger.get(f"/accounts/{account_id}/buys/{buy_id}").json()
@@ -103,14 +105,15 @@ class Buy(Subscriber):
         return self.messenger.post(f"/accounts/{account_id}/buys", data).json()
 
     def commit(self, account_id: str, buy_id: str) -> dict:
-        path = f"/accounts/{account_id}/buys/{buy_id}/commit"
-        return self.messenger.post(path).json()
+        return self.messenger.post(
+            f"/accounts/{account_id}/buys/{buy_id}/commit"
+        ).json()
 
 
 class Sell(Subscriber):
     def list(self, account_id: str, data: dict = None) -> list:
         pages = self.messenger.page(f"/accounts/{account_id}/sells", data)
-        return [buy for page in pages for buy in page.json()["data"]]
+        return [result for page in pages for result in page.json()["data"]]
 
     def get(self, account_id: str, sell_id: str) -> dict:
         return self.messenger.get(f"/accounts/{account_id}/sells/{sell_id}").json()
@@ -119,8 +122,77 @@ class Sell(Subscriber):
         return self.messenger.post(f"/accounts/{account_id}/sells", data).json()
 
     def commit(self, account_id: str, sell_id: str) -> dict:
-        path = f"/accounts/{account_id}/sells/{sell_id}/commit"
-        return self.messenger.post(path).json()
+        return self.messenger.post(
+            f"/accounts/{account_id}/sells/{sell_id}/commit"
+        ).json()
+
+
+class Deposit(Subscriber):
+    def list(self, account_id: str, data: dict = None) -> list:
+        pages = self.messenger.page(f"/accounts/{account_id}/deposits", data)
+        return [buy for page in pages for buy in page.json()["data"]]
+
+    def get(self, account_id: str, deposit_id: str) -> dict:
+        return self.messenger.get(
+            f"/accounts/{account_id}/deposits/{deposit_id}"
+        ).json()
+
+    def funds(self, account_id: str, data: dict) -> dict:
+        return self.messenger.post(f"/accounts/{account_id}/deposits", data).json()
+
+    def commit(self, account_id: str, deposit_id: str) -> dict:
+        return self.messenger.post(
+            f"/accounts/{account_id}/deposits/{deposit_id}/commit"
+        ).json()
+
+
+class Withdraw(Subscriber):
+    def list(self, account_id: str, data: dict = None) -> list:
+        pages = self.messenger.page(f"/accounts/{account_id}/withdrawals", data)
+        return [result for page in pages for result in page.json()["data"]]
+
+    def get(self, account_id: str, withdrawal_id: str) -> dict:
+        return self.messenger.get(
+            f"/accounts/{account_id}/withdrawals/{withdrawal_id}"
+        ).json()
+
+    def funds(self, account_id: str, data: dict) -> dict:
+        return self.messenger.post(f"/accounts/{account_id}/withdrawals", data).json()
+
+    def commit(self, account_id: str, withdrawal_id: str) -> dict:
+        return self.messenger.post(
+            f"/accounts/{account_id}/withdrawals/{withdrawal_id}/commit"
+        ).json()
+
+
+class Payment(Subscriber):
+    def list(self, data: dict = None) -> list:
+        pages = self.messenger.page("payment-methods", data)
+        return [result for page in pages for result in page.json()["data"]]
+
+    def get(self, payment_method_id: str) -> dict:
+        return self.messenger.get(f"/payment-methods/{payment_method_id}").json()
+
+
+class Currency(Subscriber):
+    def get(self) -> dict:
+        return self.messenger.get("/currencies").json()
+
+
+class Exchange(Subscriber):
+    def rates(self) -> dict:
+        return self.messenger.get("/exchange-rates").json()
+
+
+class Price(Subscriber):
+    def buy(self, currency_pair: str, data: dict = None) -> dict:
+        return self.messenger.get(f"/prices/{currency_pair}/buy", data).json()
+
+    def sell(self, currency_pair: str, data: dict = None) -> dict:
+        return self.messenger.get(f"/prices/{currency_pair}/sell", data).json()
+
+    def spot(self, currency_pair: str, data: dict = None) -> dict:
+        return self.messenger.get(f"/prices/{currency_pair}/spot", data).json()
 
 
 class Time(Subscriber):
@@ -138,6 +210,12 @@ class Coinbase(AbstractClient):
         self.transaction = Transaction(messenger)
         self.buy = Buy(messenger)
         self.sell = Sell(messenger)
+        self.deposit = Deposit(messenger)
+        self.withdraw = Withdraw(messenger)
+        self.payment = Payment(messenger)
+        self.currency = Currency(messenger)
+        self.exchange = Exchange(messenger)
+        self.price = Price(messenger)
         self.time = Time(messenger)
 
     def __repr__(self) -> str:
