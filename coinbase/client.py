@@ -166,9 +166,8 @@ class Withdraw(Subscriber):
 
 
 class Payment(Subscriber):
-    def list(self, data: dict = None) -> list:
-        pages = self.messenger.page("payment-methods", data)
-        return [result for page in pages for result in page.json()["data"]]
+    def list(self, data: dict = None) -> dict:
+        return self.messenger.get("/payment-methods", data).json()
 
     def get(self, payment_method_id: str) -> dict:
         return self.messenger.get(f"/payment-methods/{payment_method_id}").json()

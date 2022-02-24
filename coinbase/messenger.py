@@ -143,12 +143,15 @@ class Messenger(AbstractMessenger):
             data = {"limit": __page__}
         while True:
             response = self.get(path, data)
+            payload = response.json()
             if 200 != response.status_code:
                 return [response]
-            if not response.json():
+            if not payload:
                 break
+            if "pagination" not in payload:
+                raise KeyError("This request does not support pagination")
             responses.append(response)
-            page = response.json()["pagination"]
+            page = payload["pagination"]
             if not page["next_uri"]:
                 break
             data["starting_after"] = page["next_starting_after"]
