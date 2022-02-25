@@ -237,8 +237,8 @@ class Coinbase(AbstractClient):
 
 
 def get_messenger(settings: dict = None) -> Messenger:
-    return Messenger(Auth(API(settings)))
+    return Messenger(Auth(API(settings if settings else dict())))
 
 
 def get_client(settings: dict = None) -> Coinbase:
-    return Coinbase(Messenger(Auth(API(settings))))
+    return Coinbase(Messenger(Auth(API(settings if settings else dict()))))
