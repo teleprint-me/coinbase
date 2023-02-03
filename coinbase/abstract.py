@@ -13,6 +13,7 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# type: ignore        pass
 from abc import ABC, abstractmethod, abstractproperty
 
 from requests import Response, Session
@@ -140,4 +141,90 @@ class AbstractClient(ABC):
 
     @abstractmethod
     def plug(self, name: str, value: object):
+        pass
+
+
+class AbstractWSS(ABC):
+    @abstractproperty
+    def key(self) -> str:
+        pass
+
+    @abstractproperty
+    def secret(self) -> str:
+        pass
+
+    @abstractproperty
+    def passphrase(self) -> str:
+        pass
+
+    @abstractproperty
+    def rest(self) -> str:
+        pass
+
+    @abstractproperty
+    def feed(self) -> str:
+        pass
+
+    @abstractproperty
+    def version(self) -> int:
+        pass
+
+    @abstractmethod
+    def url(self) -> str:
+        pass
+
+
+class AbstractToken(ABC):
+    @abstractmethod
+    def __init__(self, wss: AbstractWSS = None):
+        pass
+
+    @abstractmethod
+    def __call__(self) -> dict:
+        pass
+
+    @abstractproperty
+    def wss(self) -> AbstractWSS:
+        pass
+
+    @abstractmethod
+    def signature(self, timestamp: str) -> bytes:
+        pass
+
+    @abstractmethod
+    def header(self, timestamp: str, signature: bytes) -> dict:
+        pass
+
+
+class AbstractStream(ABC):
+    @abstractmethod
+    def __init__(self, token: AbstractToken = None):
+        pass
+
+    @abstractproperty
+    def wss(self) -> AbstractWSS:
+        pass
+
+    @abstractproperty
+    def token(self) -> AbstractToken:
+        pass
+
+    @abstractproperty
+    def auth(self) -> bool:
+        pass
+
+    @abstractproperty
+    def connected(self) -> bool:
+        pass
+
+    def connect(self, trace: bool = False) -> bool:
+        pass
+
+    def send(self, message: dict):
+        pass
+
+    def receive(self) -> dict:
+        pass
+
+    def disconnect(self) -> bool:
         pass
