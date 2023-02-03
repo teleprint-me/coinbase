@@ -11,32 +11,40 @@ def get_settings(filename: str) -> dict:
     return data
 
 
-currency_code = "BTC"
+currency_code: str = "BTC"
 bitcoin: dict = None
+results: list = None
 
-print("[Client] Loading coinbase wallet...")
-settings = get_settings("settings.json")["api"]
+print("[Client] Loading wallet...")
+
+settings: dict = get_settings("settings.json")["api"]
 wallet: Wallet = get_client(settings)
-print("[Client] Loading wallet data...")
-print("[Client] [Account] Loading account list...")
+
+print("[Client] Loading wallet account list...")
+
 accounts: list[dict] = wallet.account.list()
 
-print(f"[Account] Using currency code: {currency_code}")
+print(f"[Client] Using: {currency_code}")
+
 for account in accounts:
-    if account["currency"]["code"] == currency_code:
+    if currency_code == account["currency"]["code"]:
         print(f"[Account] Found currency: {currency_code}")
         bitcoin = account
         break
 
-print("[Client] [Object] Loading transaction list...")
+print("[Client] Loading wallet transaction list...")
+
 results = wallet.transaction.list(bitcoin["id"])
 results += wallet.buy.list(bitcoin["id"])
 results += wallet.sell.list(bitcoin["id"])
-print(f"[Client] [Object] Total transactions loaded: {len(results)}")
 
-print("[Client] [Object] Printing transaction list.")
+print(f"[Client] Total wallet transactions: {len(results)}")
+
+print("[Client] Printing results...")
 print()
+
 for result in results:
     pprint(result)
     print()
-print("[Client] [Object] Done!")
+
+print("[Client] Done!")
