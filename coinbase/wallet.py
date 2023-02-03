@@ -200,7 +200,7 @@ class Time(Subscriber):
         return self.messenger.get("/time").json()
 
 
-class Coinbase(AbstractClient):
+class Wallet(AbstractClient):
     def __init__(self, messenger: Messenger):
         self.messenger = messenger
         self.user = User(messenger)
@@ -240,5 +240,5 @@ def get_messenger(settings: dict = None) -> Messenger:
     return Messenger(Auth(API(settings if settings else dict())))
 
 
-def get_client(settings: dict = None) -> Coinbase:
-    return Coinbase(Messenger(Auth(API(settings if settings else dict()))))
+def get_client(settings: dict = None) -> Wallet:
+    return Wallet(Messenger(Auth(API(settings if settings else dict()))))

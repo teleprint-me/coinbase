@@ -1,11 +1,11 @@
 from json import load
 from pprint import pprint
 
-from coinbase.wallet import Coinbase, get_client
+from coinbase.wallet import Wallet, get_client
 
 
 def get_settings(filename: str) -> dict:
-    data = None
+    data: dict = None
     with open(filename, "r") as file:
         data = load(file)
     return data
@@ -14,12 +14,12 @@ def get_settings(filename: str) -> dict:
 currency_code = "BTC"
 bitcoin: dict = None
 
-print("[Client] Loading coinbase client...")
+print("[Client] Loading coinbase wallet...")
 settings = get_settings("settings.json")["api"]
-client: Coinbase = get_client(settings)
-print("[Client] Loading client data...")
+wallet: Wallet = get_client(settings)
+print("[Client] Loading wallet data...")
 print("[Client] [Account] Loading account list...")
-accounts: list[dict] = client.account.list()
+accounts: list[dict] = wallet.account.list()
 
 print(f"[Account] Using currency code: {currency_code}")
 for account in accounts:
@@ -29,9 +29,9 @@ for account in accounts:
         break
 
 print("[Client] [Object] Loading transaction list...")
-results = client.transaction.list(bitcoin["id"])
-results += client.buy.list(bitcoin["id"])
-results += client.sell.list(bitcoin["id"])
+results = wallet.transaction.list(bitcoin["id"])
+results += wallet.buy.list(bitcoin["id"])
+results += wallet.sell.list(bitcoin["id"])
 print(f"[Client] [Object] Total transactions loaded: {len(results)}")
 
 print("[Client] [Object] Printing transaction list.")
