@@ -26,7 +26,8 @@
     "python.linting.enabled": true,
     "[python]": {
         "editor.formatOnPaste": false, // black doesn't support this feature
-        "editor.formatOnSave": true
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "ms-python.python"
     },
     "python.defaultInterpreterPath": ".venv/bin/python"
 }
