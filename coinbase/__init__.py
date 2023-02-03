@@ -1,5 +1,5 @@
 # teleprint-me/coinbase - A Python Wrapper for Coinbase
-# Copyright (C) 2021 teleprint.me
+# Copyright (C) 2021 Austin Berrio
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -15,7 +15,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 __agent__: str = "teleprint-me/coinbase"
 __source__: str = f"https://github.com/{__agent__}"
-__version__: str = "0.2.2"
+__version__: str = "0.3.0"
 # the number of results per paginated request
 __page__: int = 25
 # how many requests can we make per second?

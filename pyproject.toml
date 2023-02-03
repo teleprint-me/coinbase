@@ -1,6 +1,6 @@
 [tool.poetry]
 name               = "coinbase"
-version            = "0.2.3"
+version            = "0.3.0"
 description        = "Another Unofficial Python Wrapper for Coinbase"
 authors            = ["Austin Berrio"]
 license            = "AGPL"
