@@ -13,8 +13,8 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-from coinbase_pro.abstract import AbstractClient
-from coinbase_pro.messenger import API, Auth, Messenger, Subscriber
+from coinbase.abstract import AbstractClient
+from coinbase.messenger import API, Auth, Messenger, Subscriber
 
 
 class Account(Subscriber):

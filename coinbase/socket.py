@@ -22,7 +22,7 @@ from time import time
 
 from websocket import WebSocket, create_connection, enableTrace
 
-from coinbase_pro.abstract import AbstractStream, AbstractToken, AbstractWSS
+from coinbase.abstract import AbstractStream, AbstractToken, AbstractWSS
 
 
 @dataclass
