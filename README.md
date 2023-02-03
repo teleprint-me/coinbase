@@ -23,9 +23,14 @@
         -   [x] API Key Authentication
         -   [ ] OAuth2 Authentication
     -   [ ] Client
+        -   [ ] Wallet
+        -   [ ] Advanced Trade
+        -   [ ] Pay
+    -   [ ] WebSocket
+    -   [ ] Tests `[In Progress]`
     -   [x] Plugin `[Experimental]`
 -   [ ] API Documentation
-    -   [ ] Quickstart Guide
+    -   [ ] Quick Start Guide
 -   [ ] Install
 
 ## Tips
