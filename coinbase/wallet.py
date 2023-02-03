@@ -236,9 +236,5 @@ class Wallet(AbstractClient):
         setattr(self, name, instance)
 
 
-def get_messenger(settings: dict = None) -> Messenger:
-    return Messenger(Auth(API(settings if settings else dict())))
-
-
-def get_client(settings: dict = None) -> Wallet:
+def get_wallet(settings: dict = None) -> Wallet:
     return Wallet(Messenger(Auth(API(settings if settings else dict()))))

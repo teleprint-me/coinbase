@@ -171,3 +171,7 @@ class Subscriber(AbstractSubscriber):
 
     def error(self, response: Response) -> bool:
         return 200 != response.status_code
+
+
+def get_messenger(settings: dict = None) -> Messenger:
+    return Messenger(Auth(API(settings if settings else dict())))
