@@ -3,11 +3,6 @@
 # local stuff
 main.py
 settings.json
-csv/
-instance/
-
-# dead stuff
-archive/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -150,13 +145,14 @@ dmypy.json
 cython_debug/
 
 # Linters
-#.flake8
+!.flake8
 
 # Sqlite Database Path
 db/
 
 # Visual Studio Code
 .vscode/
+!.vscode/settings.json
 
 # Local History for Visual Studio Code
 .history/
