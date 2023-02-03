@@ -218,7 +218,7 @@ class Wallet(AbstractClient):
         self.time = Time(messenger)
 
     def __repr__(self) -> str:
-        return f"Coinbase(name={self.name}, key={self.key})"
+        return f"Wallet(name={self.name}, key={self.key})"
 
     def __str__(self) -> str:
         return self.name.capitalize()

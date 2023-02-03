@@ -182,7 +182,7 @@ class Time(Subscriber):
         return self.messenger.get("/time").json()
 
 
-class CoinbasePro(AbstractClient):
+class AdvancedTrade(AbstractClient):
     def __init__(self, messenger: Messenger):
         self.messenger = messenger
         self.account = Account(messenger)
@@ -200,7 +200,7 @@ class CoinbasePro(AbstractClient):
         self.time = Time(messenger)
 
     def __repr__(self) -> str:
-        return f"CoinbasePro(name={self.name}, key={self.key})"
+        return f"AdvancedTrade(name={self.name}, key={self.key})"
 
     def __str__(self) -> str:
         return " ".join(word.capitalize() for word in self.name.split("_"))
@@ -218,9 +218,5 @@ class CoinbasePro(AbstractClient):
         setattr(self, name, instance)
 
 
-def get_messenger(settings: dict = None) -> Messenger:
-    return Messenger(Auth(API(settings)))
-
-
-def get_client(settings: dict = None) -> CoinbasePro:
-    return CoinbasePro(Messenger(Auth(API(settings))))
+def get_trade(settings: dict = None) -> AdvancedTrade:
+    return AdvancedTrade(Messenger(Auth(API(settings))))
