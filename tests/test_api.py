@@ -1,3 +1,4 @@
+import pytest
 import requests
 
 from coinbase.api import CoinbaseAPI, BrokerageAPI
@@ -48,21 +49,24 @@ class TestBrokerageAPI(TestCoinbaseAPI):
         assert 3 == brokerage_api.version
 
     def test_path(self, brokerage_api: BrokerageAPI):
+        endpoint: str = "/api/v3/brokerage/products/BTC-USD"
+
         assert callable(brokerage_api.path)
-        assert "/v3/brokerage/time" == brokerage_api.path("/time")
+        assert endpoint == brokerage_api.path("/products/BTC-USD")
 
+    # NOTE: Brokerage endpoints require authentication
+    @pytest.mark.private
     def test_url(self, brokerage_api: BrokerageAPI):
+        url: str = "https://api.coinbase.com/api/v3/brokerage/products/BTC-USD"
+
         assert callable(brokerage_api.url)
+        assert url == brokerage_api.url("/products/BTC-USD")
 
-        assert "https://api.coinbase.com/v3/brokerage/time" == brokerage_api.url(
-            "/time"
-        )
-
-        response = requests.get(brokerage_api.url("/time"), timeout=30)
+        # NOTE: Fix this to include authy
         # authentication_error	401	Invalid auth (generic)
+        # source: https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/error-response
+        response = requests.get(url, timeout=30)
         assert 200 == response.status_code
 
         payload = response.json()
-        assert "data" in payload
-
-        assert "iso" in payload["data"] and "epoch" in payload["data"]
+        assert "product_id" in payload and "price" in payload

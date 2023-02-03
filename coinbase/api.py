@@ -51,6 +51,6 @@ class BrokerageAPI(CoinbaseAPI):
         return 3
 
     def path(self, value: str) -> str:
-        if value.startswith(f"/v{self.version}"):
+        if value.startswith(f"/api/v{self.version}"):
             return value
-        return f'/v{self.version}/brokerage/{value.lstrip("/")}'
+        return f'/api/v{self.version}/brokerage/{value.lstrip("/")}'
