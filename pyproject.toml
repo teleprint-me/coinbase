@@ -1,25 +1,23 @@
 [tool.poetry]
 name               = "coinbase"
-version            = "0.2.2"
+version            = "0.2.3"
 description        = "Another Unofficial Python Wrapper for Coinbase"
-authors            = ["teleprint-me"]
+authors            = ["Austin Berrio"]
 license            = "AGPL"
 
 [tool.poetry.dependencies]
-python             = "^3.8"
-certifi            = ">=2021.10.8"
-charset-normalizer = ">=2.0.12"
-idna               = ">=3.3"
-pip                = ">=22.0.3"
-requests           = ">=2.27.1"
-setuptools         = ">=60.9.3"
-urllib3            = ">=1.26.8"
-wheel              = ">=0.37.1"
+python             = "^3.10"
+requests           = "^2.28.2"
+websocket-client   = "^1.5.0"
 
 [tool.poetry.dev-dependencies]
-black              = ">=22.1.0"
-flake8             = ">=4.0.1"
-pytest             = ">=7.0.1"
+bpython            = "^0.24"
+black              = "^23.1.0"
+flake8             = "^6.0.0"
+flake8-black       = "^0.3.6"
+pytest             = "^7.2.1"
+python-dateutil    = "^2.8.2"
+iso8601            = "^1.1.0"
 
 [build-system]
 requires           = ["poetry-core>=1.0.0"]
