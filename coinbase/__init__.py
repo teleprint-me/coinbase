@@ -15,9 +15,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 __agent__: str = "teleprint-me/coinbase"
 __source__: str = f"https://github.com/{__agent__}"
-__version__: str = "0.3.0"
-# the number of results per paginated request
-__page__: int = 25
+__version__: str = "0.3.4"
 # how many requests can we make per second?
 # we know we can make "10,000 requests per hour".
 # we know that there are "3,600 seconds per hour".
