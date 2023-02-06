@@ -15,14 +15,17 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import hashlib
 import hmac
+
 from time import time
 
 from requests.auth import AuthBase
+
 from requests.models import PreparedRequest
 
 from coinbase import __agent__
 from coinbase import __source__
 from coinbase import __version__
+
 from coinbase.api import API
 
 
@@ -32,8 +35,12 @@ class Auth(AuthBase):
 
     def __call__(self, request: PreparedRequest) -> PreparedRequest:
         timestamp: str = str(int(time()))
-        body: str = "" if request.body is None else request.body.decode("utf-8")
-        message: str = f"{timestamp}{request.method.upper()}{request.path_url}{body}"
+        body: str = (
+            "" if request.body is None else request.body.decode("utf-8")
+        )
+        message: str = (
+            f"{timestamp}{request.method.upper()}{request.path_url}{body}"
+        )
         header: dict = self.header(timestamp, message)
         request.headers.update(header)
         return request

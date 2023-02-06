@@ -3,7 +3,10 @@ import requests
 
 from requests.auth import AuthBase
 
-from coinbase.api import API, AdvancedAPI, WebSocketAPI
+from coinbase.api import API
+from coinbase.api import AdvancedAPI
+from coinbase.api import WebSocketAPI
+
 from coinbase.auth import Auth
 
 
