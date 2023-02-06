@@ -15,17 +15,23 @@
 
 -   [Read The Documentation](https://github.com/teleprint-me/coinbase/tree/main/docs)
 
-## Tasks
+## Task List
 
--   [ ] REST API `[In Progress]`
+-   [ ] Coinbase REST and WSS API
+    -   [ ] Authentication
+        -   [x] API `[Completed]`
+        -   [x] AdvancedAPI `[Completed]`
+        -   [x] WebSocketAPI `[Completed]`
+        -   [ ] OAuth2API `[On Hold]`
     -   [ ] Messenger
-        -   [x] API Key Authentication
-        -   [ ] OAuth2 Authentication
+        -   [x] Messenger `[Completed]`
+        -   [x] AdvancedMessenger `[Completed]`
+        -   [ ] OAuth2Messenger `[On Hold]`
     -   [ ] Client
         -   [ ] Wallet `[In Progress]`
-        -   [ ] Advanced Trade 
+        -   [ ] AdvancedTrade `[In Progress]`
         -   [ ] Pay
-    -   [ ] WebSocket
+    -   [ ] WebSocket `[On Hold]`
     -   [ ] Tests `[In Progress]`
     -   [x] Plugin `[Experimental]`
 -   [ ] API Documentation
