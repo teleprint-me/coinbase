@@ -1,8 +1,10 @@
 import time
 
+from coinbase import __limit__
 
-class Teardown(object):
+
+class Teardown:
     @staticmethod
     def teardown_method():
         # Avoid rate limit
-        time.sleep(0.36)
+        time.sleep(__limit__)
