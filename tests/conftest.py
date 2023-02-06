@@ -2,13 +2,23 @@ import json
 import os
 import pytest
 
-from coinbase.api import API, AdvancedAPI, WebSocketAPI
+from coinbase.api import API
+from coinbase.api import AdvancedAPI
+from coinbase.api import WebSocketAPI
+
 from coinbase.auth import Auth
+
 from coinbase.messenger import Messenger
+from coinbase.messenger import AdvancedMessenger
 
 
 def pytest_addoption(parser):
-    parser.addoption("--private", action="store_true", default=False, help="test private endpoints")
+    parser.addoption(
+        "--private",
+        action="store_true",
+        default=False,
+        help="test private endpoints",
+    )
 
 
 def pytest_configure(config):
@@ -56,8 +66,8 @@ def messenger(auth: Auth) -> Messenger:
 
 
 @pytest.fixture(scope="module")
-def advanced_messenger(advanced_auth: Auth) -> Messenger:
-    return Messenger(advanced_auth)
+def advanced_messenger(advanced_auth: Auth) -> AdvancedMessenger:
+    return AdvancedMessenger(advanced_auth)
 
 
 # @pytest.fixture(scope="module")

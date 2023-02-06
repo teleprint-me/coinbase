@@ -13,88 +13,25 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-import hashlib
-import hmac
-from dataclasses import dataclass, field
-from time import sleep, time
+from time import sleep
 
-from requests import Response, Session
-from requests.auth import AuthBase
-from requests.models import PreparedRequest
+from requests import Response
+from requests import Session
 
-from coinbase import __agent__, __limit__, __page__, __source__, __version__
-from coinbase.abstract import (
-    AbstractAPI,
-    AbstractAuth,
-    AbstractMessenger,
-    AbstractSubscriber,
-)
+from coinbase import __agent__
+from coinbase import __limit__
+from coinbase import __source__
+from coinbase import __version__
+
+from coinbase.api import API
+from coinbase.api import AdvancedAPI
+
+from coinbase.auth import Auth
 
 
-@dataclass
-class API(AbstractAPI):
-    settings: dict = field(default_factory=dict)
-
-    @property
-    def key(self) -> str:
-        return self.settings.get("key", "")
-
-    @property
-    def secret(self) -> str:
-        return self.settings.get("secret", "")
-
-    @property
-    def rest(self) -> str:
-        return self.settings.get("rest", "https://api.coinbase.com")
-
-    @property
-    def version(self) -> int:
-        return 2
-
-    def path(self, value: str) -> str:
-        if value.startswith(f"/v{self.version}"):
-            return value
-        return f'/v{self.version}/{value.lstrip("/")}'
-
-    def url(self, value: str) -> str:
-        return f'{self.rest}/{self.path(value).lstrip("/")}'
-
-
-class Auth(AbstractAuth, AuthBase):
-    def __init__(self, api: API = None):
-        self.__api = api if api else API()
-
-    def __call__(self, request: PreparedRequest) -> PreparedRequest:
-        timestamp = str(int(time()))
-        body = "" if request.body is None else request.body.decode("utf-8")
-        message = f"{timestamp}{request.method.upper()}{request.path_url}{body}"
-        header = self.header(timestamp, message)
-        request.headers.update(header)
-        return request
-
-    @property
-    def api(self) -> API:
-        return self.__api
-
-    def signature(self, message: str) -> str:
-        key = self.api.secret.encode("ascii")
-        msg = message.encode("ascii")
-        return hmac.new(key, msg, hashlib.sha256).hexdigest()
-
-    def header(self, timestamp: str, message: str) -> dict:
-        return {
-            "User-Agent": f"{__agent__}/{__version__} {__source__}",
-            "CB-ACCESS-KEY": self.api.key,
-            "CB-ACCESS-SIGN": self.signature(message),
-            "CB-ACCESS-TIMESTAMP": timestamp,
-            "CB-VERSION": "2021-08-03",
-            "Content-Type": "application/json",
-        }
-
-
-class Messenger(AbstractMessenger):
+class Messenger:
     def __init__(self, auth: Auth = None):
-        self.__auth: AbstractAuth = auth if auth else Auth()
+        self.__auth: Auth = auth if auth else Auth()
         self.__session: Session = Session()
 
     @property
@@ -116,7 +53,10 @@ class Messenger(AbstractMessenger):
     def get(self, path: str, data: dict = None) -> Response:
         sleep(__limit__)
         return self.session.get(
-            self.api.url(path), params=data, auth=self.auth, timeout=self.timeout
+            self.api.url(path),
+            params=data,
+            auth=self.auth,
+            timeout=self.timeout,
         )
 
     def post(self, path: str, data: dict = None) -> Response:
@@ -137,15 +77,15 @@ class Messenger(AbstractMessenger):
             self.api.url(path), json=data, auth=self.auth, timeout=self.timeout
         )
 
-    def page(self, path: str, data: dict = None) -> Response:
+    def page(self, path: str, data: dict = None) -> list[Response]:
         responses = []
         if not data:
-            data = {"limit": __page__}
+            data = {"limit": 25}
         while True:
             response = self.get(path, data)
-            payload = response.json()
             if 200 != response.status_code:
                 return [response]
+            payload = response.json()
             if not payload:
                 break
             if "pagination" not in payload:
@@ -161,17 +101,51 @@ class Messenger(AbstractMessenger):
         self.session.close()
 
 
-class Subscriber(AbstractSubscriber):
-    def __init__(self, messenger: AbstractMessenger):
+class AdvancedMessenger(Messenger):
+    def get(self, path: str, data: dict = None) -> Response:
+        sleep(__limit__)
+        return self.session.get(
+            self.api.url(path), json=data, auth=self.auth, timeout=self.timeout
+        )
+
+    def page(self, path: str, data: dict = None) -> list[Response]:
+        responses = []
+        if not data:
+            data = {"limit": 50}
+        while True:
+            response = self.get(path, data)
+            if 200 != response.status_code:
+                return [response]
+            payload = response.json()
+            if not payload:
+                break
+            if "has_next" not in payload:
+                raise KeyError("This request does not support pagination")
+            if not payload["has_next"]:
+                break
+            if "cursor" in data:
+                if data["cursor"] == payload["cursor"]:
+                    break
+            responses.append(response)
+            data["cursor"] = payload["cursor"]
+        return responses
+
+
+class Subscriber:
+    def __init__(self, messenger: Messenger):
         self.__messenger = messenger
 
     @property
-    def messenger(self) -> AbstractMessenger:
+    def messenger(self) -> Messenger:
         return self.__messenger
 
     def error(self, response: Response) -> bool:
         return 200 != response.status_code
 
 
-def get_messenger(settings: dict = None) -> Messenger:
-    return Messenger(Auth(API(settings if settings else dict())))
+def get_messenger(settings: dict) -> Messenger:
+    return Messenger(Auth(API(settings)))
+
+
+def get_advanced_messenger(settings: dict) -> Messenger:
+    return AdvancedMessenger(Auth(AdvancedAPI(settings)))
