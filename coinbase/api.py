@@ -15,10 +15,23 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from dataclasses import dataclass, field
 
+from os import getenv
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
+def get_api_settings() -> dict:
+    API_KEY = getenv("API_KEY")
+    API_SECRET = getenv("API_SECRET")
+    API_REST = getenv("API_REST")
+    API_FEED = getenv("API_FEED")
+    return {"key": API_KEY, "secret": API_SECRET, "rest": API_REST, "feed": API_FEED}
+
 
 @dataclass
-class CoinbaseAPI:
-    settings: dict = field(default_factory=dict)
+class API:
+    settings: dict = field(default_factory=get_api_settings)
 
     @property
     def key(self) -> str:
@@ -45,7 +58,7 @@ class CoinbaseAPI:
         return f'{self.rest}/{self.path(value).lstrip("/")}'
 
 
-class BrokerageAPI(CoinbaseAPI):
+class AdvancedAPI(API):
     @property
     def version(self) -> int:
         return 3
@@ -54,3 +67,10 @@ class BrokerageAPI(CoinbaseAPI):
         if value.startswith(f"/api/v{self.version}"):
             return value
         return f'/api/v{self.version}/brokerage/{value.lstrip("/")}'
+
+
+# WIP
+class WebSocketAPI(AdvancedAPI):
+    @property
+    def feed(self) -> str:
+        return self.settings.get("feed", "wss://advanced-trade-ws.coinbase.com")
