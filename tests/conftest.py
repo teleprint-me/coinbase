@@ -2,16 +2,13 @@ import json
 import os
 import pytest
 
-from coinbase.api import CoinbaseAPI, BrokerageAPI
-
-# from coinbase.wallet import Wallet
-# from coinbase.socket import WSS, Stream, Token
+from coinbase.api import API, AdvancedAPI, WebSocketAPI
+from coinbase.auth import Auth
+from coinbase.messenger import Messenger
 
 
 def pytest_addoption(parser):
-    parser.addoption(
-        "--private", action="store_true", default=False, help="test private endpoints"
-    )
+    parser.addoption("--private", action="store_true", default=False, help="test private endpoints")
 
 
 def pytest_configure(config):
@@ -29,28 +26,38 @@ def pytest_collection_modifyitems(config, items):
 
 
 @pytest.fixture(scope="module")
-def settings() -> dict:
-    data = dict()
-
-    if os.path.exists("settings.json"):
-        filepath = "settings.json"
-    else:
-        filepath = "tests/settings.json"
-
-    with open(filepath, "r") as file:
-        data = json.load(file)
-
-    return data
+def api() -> API:
+    return API()
 
 
 @pytest.fixture(scope="module")
-def coinbase_api(settings: dict) -> CoinbaseAPI:
-    return CoinbaseAPI(settings["api"])
+def advanced_api() -> AdvancedAPI:
+    return AdvancedAPI()
 
 
 @pytest.fixture(scope="module")
-def brokerage_api(settings: dict) -> BrokerageAPI:
-    return BrokerageAPI(settings["api"])
+def websocket_api() -> WebSocketAPI:
+    return WebSocketAPI()
+
+
+@pytest.fixture(scope="module")
+def auth(api: API) -> Auth:
+    return Auth(api)
+
+
+@pytest.fixture(scope="module")
+def advanced_auth(advanced_api: AdvancedAPI) -> Auth:
+    return Auth(advanced_api)
+
+
+@pytest.fixture(scope="module")
+def messenger(auth: Auth) -> Messenger:
+    return Messenger(auth)
+
+
+@pytest.fixture(scope="module")
+def advanced_messenger(advanced_auth: Auth) -> Messenger:
+    return Messenger(advanced_auth)
 
 
 # @pytest.fixture(scope="module")
@@ -59,24 +66,8 @@ def brokerage_api(settings: dict) -> BrokerageAPI:
 
 
 # @pytest.fixture(scope="module")
-# def auth(api: API) -> Auth:
-#     return Auth(api)
-
-
-# @pytest.fixture(scope="module")
 # def token(wss: WSS) -> Token:
 #     return Token(wss)
-
-
-# @pytest.fixture(scope="module")
-# def public_messenger() -> Messenger:
-#     return Messenger()
-
-
-# @pytest.fixture(scope="module")
-# def private_messenger(auth: Auth) -> Messenger:
-#     return Messenger(auth)
-
 
 # @pytest.fixture(scope="module")
 # def public_client(public_messenger: Messenger) -> CoinbasePro:
