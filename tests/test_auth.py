@@ -1,12 +1,15 @@
 import pytest
 import requests
-from coinbase_pro.abstract import AbstractAuth
-from coinbase_pro.messenger import Auth
+
+from requests.auth import AuthBase
+
+from coinbase.api import API, AdvancedAPI, WebSocketAPI
+from coinbase.auth import Auth
 
 
 class TestAuth:
     def test_type(self, auth: Auth):
-        assert isinstance(auth, AbstractAuth)
+        assert isinstance(auth, AuthBase)
         assert isinstance(auth, Auth)
 
     def test_attr(self, auth: Auth):
@@ -18,7 +21,6 @@ class TestAuth:
     def test_properties(self, auth: Auth):
         assert isinstance(auth.api.key, str)
         assert isinstance(auth.api.secret, str)
-        assert isinstance(auth.api.passphrase, str)
 
     def test_callable(self, auth: Auth):
         assert callable(auth)
@@ -26,7 +28,55 @@ class TestAuth:
         assert callable(auth.header)
 
     @pytest.mark.private
-    def test_request(self, auth: Auth):
-        assert "sandbox" in auth.api.rest, auth.api.rest
-        response = requests.get(auth.api.url("/accounts"), auth=auth, timeout=30)
-        assert response.status_code == 200, response.json()["message"]
+    def test_auth(self, api: API, auth: Auth):
+        assert "https://api.coinbase.com/v2/accounts" == api.url("/accounts")
+
+        response = requests.get(api.url("/accounts"), auth=auth, timeout=30)
+        assert 200 == response.status_code
+
+        payload = response.json()
+        assert "pagination" in payload and "data" in payload
+
+        page = payload["pagination"]
+        assert "limit" in page and "next_uri" in page
+
+        data = payload["data"]
+        assert isinstance(data, list)
+        assert "id" in data[0] and "currency" in data[0]
+
+
+class TestAdvancedAuth:
+    def test_type(self, advanced_auth: Auth):
+        assert isinstance(advanced_auth, AuthBase)
+        assert isinstance(advanced_auth, Auth)
+
+    def test_attr(self, advanced_auth: Auth):
+        assert hasattr(advanced_auth, "_Auth__api")
+        assert hasattr(advanced_auth, "api")
+        assert hasattr(advanced_auth, "signature")
+        assert hasattr(advanced_auth, "header")
+
+    def test_properties(self, advanced_auth: Auth):
+        assert isinstance(advanced_auth.api.key, str)
+        assert isinstance(advanced_auth.api.secret, str)
+
+    def test_callable(self, advanced_auth: Auth):
+        assert callable(advanced_auth)
+        assert callable(advanced_auth.signature)
+        assert callable(advanced_auth.header)
+
+    @pytest.mark.private
+    def test_auth(self, advanced_api: AdvancedAPI, advanced_auth: Auth):
+        url: str = "https://api.coinbase.com/api/v3/brokerage/products/BTC-USD"
+
+        assert callable(advanced_api.url)
+        assert url == advanced_api.url("/products/BTC-USD")
+
+        # NOTE: brokerage endpoints require auth
+        # authentication_error	401	Invalid auth (generic)
+        # source: https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/error-response
+        response = requests.get(url, auth=advanced_auth, timeout=30)
+        assert 200 == response.status_code
+
+        payload = response.json()
+        assert "product_id" in payload and "price" in payload

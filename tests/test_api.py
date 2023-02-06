@@ -41,6 +41,19 @@ class TestAPI:
         assert callable(api.path)
         assert "/v2/time" == api.path("/time")
 
+    def test_url(self, api: API):
+        assert callable(api.url)
+
+        assert "https://api.coinbase.com/v2/time" == api.url("/time")
+
+        response = requests.get(api.url("/time"), timeout=30)
+        assert 200 == response.status_code
+
+        payload = response.json()
+        assert "data" in payload
+
+        assert "iso" in payload["data"] and "epoch" in payload["data"]
+
 
 class TestAdvancedAPI(TestAPI):
     def test_type(self, advanced_api: AdvancedAPI):
