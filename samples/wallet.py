@@ -1,14 +1,8 @@
 from json import load
 from pprint import pprint
 
+from coinbase.api import get_api_settings
 from coinbase.wallet import Wallet, get_wallet
-
-
-def get_settings(filename: str) -> dict:
-    data: dict = None
-    with open(filename, "r") as file:
-        data = load(file)
-    return data
 
 
 currency_code: str = "BTC"
@@ -17,7 +11,7 @@ results: list = None
 
 print("[Client] Loading wallet...")
 
-settings: dict = get_settings("settings.json")["api"]
+settings: dict = get_api_settings()
 wallet: Wallet = get_wallet(settings)
 
 print("[Client] Loading wallet account list...")
