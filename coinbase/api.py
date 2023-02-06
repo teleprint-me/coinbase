@@ -13,10 +13,12 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from dataclasses import field
+
+from dotenv import load_dotenv
 
 from os import getenv
-from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -26,7 +28,12 @@ def get_api_settings() -> dict:
     API_SECRET = getenv("API_SECRET")
     API_REST = getenv("API_REST")
     API_FEED = getenv("API_FEED")
-    return {"key": API_KEY, "secret": API_SECRET, "rest": API_REST, "feed": API_FEED}
+    return {
+        "key": API_KEY,
+        "secret": API_SECRET,
+        "rest": API_REST,
+        "feed": API_FEED,
+    }
 
 
 @dataclass
@@ -73,4 +80,6 @@ class AdvancedAPI(API):
 class WebSocketAPI(AdvancedAPI):
     @property
     def feed(self) -> str:
-        return self.settings.get("feed", "wss://advanced-trade-ws.coinbase.com")
+        return self.settings.get(
+            "feed", "wss://advanced-trade-ws.coinbase.com"
+        )

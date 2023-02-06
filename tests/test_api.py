@@ -1,14 +1,19 @@
 import pytest
 import requests
 
-from coinbase.api import get_api_settings, API, AdvancedAPI, WebSocketAPI
+from coinbase.api import get_api_settings
+from coinbase.api import API
+from coinbase.api import AdvancedAPI
+from coinbase.api import WebSocketAPI
 
 
 def test_get_api_settings():
     api_settings = get_api_settings()
 
     assert isinstance(api_settings, dict)
-    assert all(key in api_settings for key in ("key", "secret", "rest", "feed"))
+    assert all(
+        key in api_settings for key in ("key", "secret", "rest", "feed")
+    )
 
     for key in api_settings.keys():
         assert isinstance(api_settings[key], str)
