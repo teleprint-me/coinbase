@@ -147,5 +147,5 @@ def get_messenger(settings: dict) -> Messenger:
     return Messenger(Auth(API(settings)))
 
 
-def get_advanced_messenger(settings: dict) -> Messenger:
+def get_advanced_messenger(settings: dict) -> AdvancedMessenger:
     return AdvancedMessenger(Auth(AdvancedAPI(settings)))
