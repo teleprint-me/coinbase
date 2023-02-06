@@ -25,4 +25,4 @@ payload = response.json()
 assert "product_id" in payload and "price" in payload
 
 # Clean up the session
-messenger.session.close()
+messenger.close()
