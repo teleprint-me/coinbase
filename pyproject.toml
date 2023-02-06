@@ -1,6 +1,6 @@
 [tool.poetry]
 name               = "coinbase"
-version            = "0.3.0"
+version            = "0.3.4"
 description        = "Another Unofficial Python Wrapper for Coinbase"
 authors            = ["Austin Berrio"]
 license            = "AGPL"
@@ -21,7 +21,7 @@ iso8601            = "^1.1.0"
 python-dotenv      = "^0.21.1"
 
 [tool.black]
-line-length = 100
+line-length = 79
 
 [build-system]
 requires           = ["poetry-core>=1.0.0"]
