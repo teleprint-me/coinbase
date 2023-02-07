@@ -8,7 +8,7 @@ from coinbase.api import WebSocketAPI
 
 
 def test_get_api_settings():
-    api_settings = get_api_settings()
+    api_settings: dict = get_api_settings()
 
     assert isinstance(api_settings, dict)
     assert all(
@@ -26,9 +26,16 @@ class TestAPI:
         assert isinstance(api, API)
 
     def test_attributes(self, api: API):
-        attributes = ["settings", "key", "secret", "rest", "version"]
-        for attribute in attributes:
-            assert hasattr(api, attribute)
+        assert all(
+            hasattr(api, attribute)
+            for attribute in (
+                "settings",
+                "key",
+                "secret",
+                "rest",
+                "version",
+            )
+        )
 
     def test_properties(self, api: API):
         assert isinstance(api.settings, dict)
