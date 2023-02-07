@@ -13,8 +13,12 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-from coinbase.abstract import AbstractClient
-from coinbase.messenger import API, Auth, Messenger, Subscriber
+from coinbase.api import API
+
+from coinbase.auth import Auth
+
+from coinbase.messenger import Messenger
+from coinbase.messenger import Subscriber
 
 
 class User(Subscriber):
@@ -32,7 +36,7 @@ class User(Subscriber):
 
 
 class Account(Subscriber):
-    def list(self, data: dict = None) -> list:
+    def list(self, data: dict = None) -> list[dict]:
         pages = self.messenger.page("/accounts", data)
         return [result for page in pages for result in page.json()["data"]]
 
@@ -52,21 +56,29 @@ class Address(Subscriber):
         return [result for page in pages for result in page.json()["data"]]
 
     def get(self, account_id: str, address_id: str) -> dict:
-        return self.messenger.get(f"/accounts/{account_id}/addresses/{address_id}")
+        return self.messenger.get(
+            f"/accounts/{account_id}/addresses/{address_id}"
+        )
 
-    def transactions(self, account_id: str, address_id: str, data: dict = None) -> list:
+    def transactions(
+        self, account_id: str, address_id: str, data: dict = None
+    ) -> list:
         pages = self.messenger.page(
             f"/accounts/{account_id}/addresses/{address_id}/transactions", data
         )
         return [tx for page in pages for tx in page.json()["data"]]
 
     def create(self, account_id: str, data: dict) -> dict:
-        return self.messenger.post(f"/accounts/{account_id}/addresses", data).json()
+        return self.messenger.post(
+            f"/accounts/{account_id}/addresses", data
+        ).json()
 
 
 class Transaction(Subscriber):
     def list(self, account_id: str, data: dict = None) -> list:
-        pages = self.messenger.page(f"/accounts/{account_id}/transactions", data)
+        pages = self.messenger.page(
+            f"/accounts/{account_id}/transactions", data
+        )
         return [tx for page in pages for tx in page.json()["data"]]
 
     def get(self, account_id: str, transaction_id: str) -> dict:
@@ -75,7 +87,9 @@ class Transaction(Subscriber):
         ).json()
 
     def send(self, account_id: str, data: dict) -> dict:
-        return self.messenger.post(f"/accounts/{account_id}/transactions", data).json()
+        return self.messenger.post(
+            f"/accounts/{account_id}/transactions", data
+        ).json()
 
     def complete(self, account_id: str, transaction_id: str) -> dict:
         return self.messenger.post(
@@ -99,7 +113,9 @@ class Buy(Subscriber):
         return [result for page in pages for result in page.json()["data"]]
 
     def get(self, account_id: str, buy_id: str) -> dict:
-        return self.messenger.get(f"/accounts/{account_id}/buys/{buy_id}").json()
+        return self.messenger.get(
+            f"/accounts/{account_id}/buys/{buy_id}"
+        ).json()
 
     def order(self, account_id: str, data: dict) -> dict:
         return self.messenger.post(f"/accounts/{account_id}/buys", data).json()
@@ -116,10 +132,14 @@ class Sell(Subscriber):
         return [result for page in pages for result in page.json()["data"]]
 
     def get(self, account_id: str, sell_id: str) -> dict:
-        return self.messenger.get(f"/accounts/{account_id}/sells/{sell_id}").json()
+        return self.messenger.get(
+            f"/accounts/{account_id}/sells/{sell_id}"
+        ).json()
 
     def order(self, account_id: str, data: dict) -> dict:
-        return self.messenger.post(f"/accounts/{account_id}/sells", data).json()
+        return self.messenger.post(
+            f"/accounts/{account_id}/sells", data
+        ).json()
 
     def commit(self, account_id: str, sell_id: str) -> dict:
         return self.messenger.post(
@@ -138,7 +158,9 @@ class Deposit(Subscriber):
         ).json()
 
     def funds(self, account_id: str, data: dict) -> dict:
-        return self.messenger.post(f"/accounts/{account_id}/deposits", data).json()
+        return self.messenger.post(
+            f"/accounts/{account_id}/deposits", data
+        ).json()
 
     def commit(self, account_id: str, deposit_id: str) -> dict:
         return self.messenger.post(
@@ -148,7 +170,9 @@ class Deposit(Subscriber):
 
 class Withdraw(Subscriber):
     def list(self, account_id: str, data: dict = None) -> list:
-        pages = self.messenger.page(f"/accounts/{account_id}/withdrawals", data)
+        pages = self.messenger.page(
+            f"/accounts/{account_id}/withdrawals", data
+        )
         return [result for page in pages for result in page.json()["data"]]
 
     def get(self, account_id: str, withdrawal_id: str) -> dict:
@@ -157,7 +181,9 @@ class Withdraw(Subscriber):
         ).json()
 
     def funds(self, account_id: str, data: dict) -> dict:
-        return self.messenger.post(f"/accounts/{account_id}/withdrawals", data).json()
+        return self.messenger.post(
+            f"/accounts/{account_id}/withdrawals", data
+        ).json()
 
     def commit(self, account_id: str, withdrawal_id: str) -> dict:
         return self.messenger.post(
@@ -170,7 +196,9 @@ class Payment(Subscriber):
         return self.messenger.get("/payment-methods", data).json()
 
     def get(self, payment_method_id: str) -> dict:
-        return self.messenger.get(f"/payment-methods/{payment_method_id}").json()
+        return self.messenger.get(
+            f"/payment-methods/{payment_method_id}"
+        ).json()
 
 
 class Currency(Subscriber):
@@ -200,7 +228,7 @@ class Time(Subscriber):
         return self.messenger.get("/time").json()
 
 
-class Wallet(AbstractClient):
+class Wallet:
     def __init__(self, messenger: Messenger):
         self.messenger = messenger
         self.user = User(messenger)
@@ -236,5 +264,5 @@ class Wallet(AbstractClient):
         setattr(self, name, instance)
 
 
-def get_wallet(settings: dict = None) -> Wallet:
-    return Wallet(Messenger(Auth(API(settings if settings else dict()))))
+def get_wallet(settings: dict) -> Wallet:
+    return Wallet(Messenger(Auth(API(settings))))

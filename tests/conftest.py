@@ -11,6 +11,8 @@ from coinbase.auth import Auth
 from coinbase.messenger import Messenger
 from coinbase.messenger import AdvancedMessenger
 
+from coinbase.wallet import Wallet
+
 
 def pytest_addoption(parser):
     parser.addoption(
@@ -70,6 +72,16 @@ def advanced_messenger(advanced_auth: Auth) -> AdvancedMessenger:
     return AdvancedMessenger(advanced_auth)
 
 
+@pytest.fixture(scope="module")
+def wallet(messenger: Messenger) -> Wallet:
+    return Wallet(messenger)
+
+
+# @pytest.fixture(scope="module")
+# def client_advanced(private_messenger: Messenger) -> CoinbasePro:
+#     return CoinbasePro(private_messenger)
+
+
 # @pytest.fixture(scope="module")
 # def wss(settings: dict) -> WSS:
 #     return WSS(settings["api"])
@@ -78,16 +90,6 @@ def advanced_messenger(advanced_auth: Auth) -> AdvancedMessenger:
 # @pytest.fixture(scope="module")
 # def token(wss: WSS) -> Token:
 #     return Token(wss)
-
-# @pytest.fixture(scope="module")
-# def public_client(public_messenger: Messenger) -> CoinbasePro:
-#     return CoinbasePro(public_messenger)
-
-
-# @pytest.fixture(scope="module")
-# def private_client(private_messenger: Messenger) -> CoinbasePro:
-#     return CoinbasePro(private_messenger)
-
 
 # @pytest.fixture(scope="module")
 # def public_stream() -> Stream:
