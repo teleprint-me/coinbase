@@ -17,30 +17,47 @@
 
 ## Task List
 
--   [ ] Coinbase REST and WSS API
+-   [ ] Coinbase `In Progress`
     -   [ ] Authentication
-        -   [x] API `[Completed]`
-        -   [x] AdvancedAPI `[Completed]`
-        -   [x] WebSocketAPI `[Completed]`
+        -   [x] API
+        -   [x] AdvancedAPI
+        -   [x] WebSocketAPI
         -   [ ] OAuth2API `[On Hold]`
     -   [ ] Messenger
-        -   [x] Messenger `[Completed]`
-        -   [x] AdvancedMessenger `[Completed]`
+        -   [x] Messenger
+        -   [x] AdvancedMessenger
         -   [ ] OAuth2Messenger `[On Hold]`
     -   [ ] Client
-        -   [ ] Wallet `[In Progress]`
+        -   [x] Wallet
         -   [ ] AdvancedTrade `[In Progress]`
-        -   [ ] Pay
-    -   [ ] WebSocket `[On Hold]`
+        -   [ ] Pay `[On Hold]`
+    -   [ ] Socket `[On Hold]`
     -   [ ] Tests `[In Progress]`
+        -   [ ] Authentication
+            -   [x] API
+            -   [x] AdvancedAPI
+            -   [x] WebSocketAPI
+            -   [ ] OAuth2API `[On Hold]`
+        -   [ ] Messenger
+            -   [x] Messenger
+            -   [x] AdvancedMessenger
+            -   [ ] OAuth2Messenger `[On Hold]`
+        -   [ ] Client
+            -   [x] Wallet `[Completed]`
+            -   [ ] AdvancedTrade `[In Progress]`
+            -   [ ] Pay `[On Hold]`
     -   [x] Plugin `[Experimental]`
--   [ ] API Documentation
+-   [ ] API Documentation `[On Hold]`
     -   [ ] Quick Start Guide
--   [ ] Install
+    -   [ ] Install
+    -   [ ] API
+    -   [ ] Auth
+    -   [ ] Messenger
+    -   [ ] Client
+    -   [ ] Socket
 
 ## Tips
 
 -   Buy me a coffee :coffee:
--   Bitcoin: [397d3tB2Mr6ECBjeZH9FU1v1UMnaKc2SVt](https://www.blockchain.com/btc/address/397d3tB2Mr6ECBjeZH9FU1v1UMnaKc2SVt)
 
-![Bitcoin QR Code](https://github.com/teleprint-me/coinbase/blob/main/assets/qr-bitcoin.png?raw=true)
+    [![Bitcoin](https://img.shields.io/badge/Bitcoin-3Q4qSNxpiEcaK3aJDdagzqU9XNyqs8zNrJ-orange)](https://blockstream.info/address/3Q4qSNxpiEcaK3aJDdagzqU9XNyqs8zNrJ)
