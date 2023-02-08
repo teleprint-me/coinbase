@@ -15,10 +15,11 @@ bpython            = "^0.24"
 black              = "^23.1.0"
 flake8             = "^6.0.0"
 flake8-black       = "^0.3.6"
+pdoc               = "^12.3.1"
 pytest             = "^7.2.1"
 python-dateutil    = "^2.8.2"
-iso8601            = "^1.1.0"
 python-dotenv      = "^0.21.1"
+iso8601            = "^1.1.0"
 
 [tool.black]
 line-length = 79
