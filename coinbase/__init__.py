@@ -19,7 +19,7 @@ __agent__: str = "teleprint-me/coinbase"
 __source__: str = f"https://github.com/{__agent__}"
 # The source of the code. This is a link to the GitHub repository.
 
-__version__: str = "0.4.0"
+__version__: str = "0.4.2"
 # The version of the code.
 
 __limit__: float = 1 / (10000 / 3600)
