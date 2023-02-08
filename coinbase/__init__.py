@@ -1,4 +1,4 @@
-# teleprint-me/coinbase - A Python Wrapper for Coinbase
+# teleprint-me/coinbase - Another Unofficial Python Wrapper for Coinbase
 # Copyright (C) 2021 Austin Berrio
 #
 # This program is free software: you can redistribute it and/or modify
@@ -14,18 +14,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 __agent__: str = "teleprint-me/coinbase"
+# The name of the agent using the code
+
 __source__: str = f"https://github.com/{__agent__}"
+# The source of the code. This is a link to the GitHub repository.
+
 __version__: str = "0.4.0"
-# how many requests can we make per second?
-# we know we can make "10,000 requests per hour".
-# we know that there are "3,600 seconds per hour".
-# we need to know what "1 request per [n] seconds" is.
-#       1 request / [n] seconds
-# [n] is the number of requests we can make per second.
-#       n -> 10000 requests per hour / 3600 seconds per hour
-#       n -> [2.7...] requests / second; where [...] is repeating
-# rate limit -> 1 request / (10000 rph / 3600 rph) second
-# rate limit -> 1 request / [2.7...] second
-# rate limit -> 0.36 seconds
-# __limit__ is used to block a request for at least 0.36 seconds.
+# The version of the code.
+
 __limit__: float = 1 / (10000 / 3600)
+# The rate limit of the API requests, in seconds.
+# This is calculated as 1 / (10000 requests per hour / 3600 seconds per hour)
+# The rate limit is used to block a request for at least 0.36 seconds.

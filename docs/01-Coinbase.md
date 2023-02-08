@@ -1,38 +1,37 @@
-# Coinbase Initialization
+# Coinbase
+
+This module contains important information about the `teleprint-me/coinbase` package, including its source code repository, version, and request rate limit.
 
 ## Variables
 
-### **agent**
+### __agent__
 
--   Type: `str`
--   Value: `"teleprint-me/coinbase"`
+```py
+__agent__: str
+```
 
-The name of the agent responsible for the source code.
+The identifier of the agent using the package.
 
-### **source**
+### __source__
 
--   Type: `str`
--   Value: `"https://github.com/teleprint-me/coinbase"`
+```py
+__source__: str
+```
 
-The source URL of the source code on Github.
+The URL of the source code repository for the package.
 
-### **version**
+### __version__
 
--   Type: `str`
--   Value: `"0.3.0"`
+```py
+__version__: str
+```
 
-The version of the source code.
+The version number of the `teleprint-me/coinbase` package.
 
-### **page**
+### __limit__
 
--   Type: `int`
--   Value: `25`
+```py
+__limit__: float
+```
 
-The number of results per paginated request.
-
-### **limit**
-
--   Type: `float`
--   Value: `0.36`
-
-The minimum time, in seconds, that must pass between each request. This limit is calculated based on the rate limit of 10,000 requests per hour.
+The rate limit of the API, expressed as the number of seconds between each allowed request. This is calculated as the reciprocal of the number of requests that can be made per hour, divided by the number of seconds per hour. The rate limit is 0.36 seconds.

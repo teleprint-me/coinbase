@@ -1,4 +1,4 @@
-# coinbase-pro - A Python API Adapter for Coinbase Pro and Coinbase Exchange
+# teleprint-me/coinbase - Another Unofficial Python Wrapper for Coinbase
 # Copyright (C) 2021 Austin Berrio
 #
 # This program is free software: you can redistribute it and/or modify
@@ -22,43 +22,8 @@ from time import time
 
 from websocket import WebSocket, create_connection, enableTrace
 
-from coinbase.abstract import AbstractStream, AbstractToken, AbstractWSS
 
-
-@dataclass
-class WSS(AbstractWSS):
-    settings: dict = field(default_factory=dict)
-
-    @property
-    def key(self) -> str:
-        return self.settings.get("key", "")
-
-    @property
-    def secret(self) -> str:
-        return self.settings.get("secret", "")
-
-    @property
-    def passphrase(self) -> str:
-        return self.settings.get("passphrase", "")
-
-    @property
-    def rest(self) -> str:
-        return self.settings.get("rest", "https://api.pro.coinbase.com")
-
-    @property
-    def feed(self) -> str:
-        return self.settings.get("feed", "wss://ws-feed.pro.coinbase.com")
-
-    @property
-    def version(self) -> int:
-        return 1
-
-    @property
-    def url(self) -> str:
-        return self.feed
-
-
-class Token(AbstractToken):
+class Token:
     def __init__(self, wss: WSS = None):
         self.__wss = wss if wss else WSS()
 
@@ -88,7 +53,7 @@ class Token(AbstractToken):
         }
 
 
-class Stream(AbstractStream):
+class Stream:
     def __init__(self, token: Token = None):
         self.__token: Token = token if token else Token()
         self.__wss: WSS = self.__token.wss
@@ -113,7 +78,9 @@ class Stream(AbstractStream):
     def connect(self, trace: bool = False) -> bool:
         enableTrace(trace)
         if self.auth:
-            self.socket = create_connection(url=self.wss.url, header=self.token())
+            self.socket = create_connection(
+                url=self.wss.url, header=self.token()
+            )
         else:
             self.socket = create_connection(url=self.wss.url)
         return self.connected
@@ -136,7 +103,11 @@ class Stream(AbstractStream):
 
 
 def get_message() -> dict:
-    return {"type": "subscribe", "product_ids": ["BTC-USD"], "channels": ["ticker"]}
+    return {
+        "type": "subscribe",
+        "product_ids": ["BTC-USD"],
+        "channels": ["ticker"],
+    }
 
 
 def get_stream(settings: dict = None) -> Stream:

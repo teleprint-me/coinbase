@@ -1,4 +1,4 @@
-# teleprint-me/coinbase - A Python Wrapper for Coinbase
+# teleprint-me/coinbase - Another Unofficial Python Wrapper for Coinbase
 # Copyright (C) 2021 Austin Berrio
 #
 # This program is free software: you can redistribute it and/or modify
@@ -30,10 +30,24 @@ from coinbase.api import API
 
 
 class Auth(AuthBase):
+    """Create and return an HTTP request with authentication headers.
+
+    :param api: Instance of the API class, if not provided, a default instance is created.
+    """
+
     def __init__(self, api: API = None):
+        """Create an instance of the Auth class.
+
+        :param api: Instance of the API class, if not provided, a default instance is created.
+        """
         self.__api: API = api if api else API()
 
     def __call__(self, request: PreparedRequest) -> PreparedRequest:
+        """Return the prepared request with updated headers.
+
+        :param request: A prepared HTTP request.
+        :return: The same request with updated headers.
+        """
         timestamp: str = str(int(time()))
         body: str = (
             "" if request.body is None else request.body.decode("utf-8")
@@ -47,14 +61,29 @@ class Auth(AuthBase):
 
     @property
     def api(self) -> API:
+        """Return the API instance.
+
+        :return: The API instance.
+        """
         return self.__api
 
     def signature(self, message: str) -> str:
+        """Return the signature of a message.
+
+        :param message: The message to sign.
+        :return: The signature of the message.
+        """
         key = self.api.secret.encode("ascii")
         msg = message.encode("ascii")
         return hmac.new(key, msg, hashlib.sha256).hexdigest()
 
     def header(self, timestamp: str, message: str) -> dict:
+        """Return the headers for an authenticated request.
+
+        :param timestamp: The timestamp of the request.
+        :param message: The message to sign.
+        :return: The headers for an authenticated request.
+        """
         return {
             "User-Agent": f"{__agent__}/{__version__} {__source__}",
             "CB-ACCESS-KEY": self.api.key,
