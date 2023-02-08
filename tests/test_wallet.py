@@ -59,6 +59,7 @@ class TestWallet(object):
 
 
 class TestWalletAccount(Teardown):
+    @pytest.mark.private
     def test_list(self, wallet: Wallet):
         accounts = wallet.account.list()
         assert isinstance(accounts, list)
@@ -68,6 +69,7 @@ class TestWalletAccount(Teardown):
             assert "currency" in account
             assert "code" in account["currency"]
 
+    @pytest.mark.private
     def test_get(self, wallet: Wallet):
         currency_code = "BTC"
         account_id = next(
