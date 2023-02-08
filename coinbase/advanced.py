@@ -1,4 +1,4 @@
-# coinbase-pro - A Python API Adapter for Coinbase Pro and Coinbase Exchange
+# teleprint-me/coinbase - Another Unofficial Python Wrapper for Coinbase
 # Copyright (C) 2021 Austin Berrio
 #
 # This program is free software: you can redistribute it and/or modify
@@ -28,10 +28,14 @@ class Account(Subscriber):
         return self.messenger.get(f"/accounts/{account_id}/holds", data).json()
 
     def ledger(self, account_id: str, data: dict = None) -> list:
-        return self.messenger.get(f"/accounts/{account_id}/ledger", data).json()
+        return self.messenger.get(
+            f"/accounts/{account_id}/ledger", data
+        ).json()
 
     def transfers(self, account_id: str, data: dict = None) -> list:
-        return self.messenger.get(f"/accounts/{account_id}/transfers", data).json()
+        return self.messenger.get(
+            f"/accounts/{account_id}/transfers", data
+        ).json()
 
 
 class Coinbase(Subscriber):
@@ -39,13 +43,17 @@ class Coinbase(Subscriber):
         return self.messenger.get("/coinbase-accounts").json()
 
     def generate_address(self, account_id: str) -> dict:
-        return self.messenger.post(f"/coinbase-accounts/{account_id}/addresses").json()
+        return self.messenger.post(
+            f"/coinbase-accounts/{account_id}/addresses"
+        ).json()
 
     def deposit_from(self, data: dict) -> dict:
         return self.messenger.post("/deposits/coinbase-account", data).json()
 
     def withdraw_to(self, data: dict) -> dict:
-        return self.messenger.post("/withdrawals/coinbase-account", data).json()
+        return self.messenger.post(
+            "/withdrawals/coinbase-account", data
+        ).json()
 
 
 class Convert(Subscriber):
@@ -131,10 +139,14 @@ class Product(Subscriber):
         return self.messenger.get(f"/products/{product_id}/ticker").json()
 
     def trades(self, product_id: str, data: dict = None) -> list:
-        return self.messenger.get(f"/products/{product_id}/trades", data).json()
+        return self.messenger.get(
+            f"/products/{product_id}/trades", data
+        ).json()
 
     def candles(self, product_id: str, data: dict = None) -> list:
-        return self.messenger.get(f"/products/{product_id}/candles", data).json()
+        return self.messenger.get(
+            f"/products/{product_id}/candles", data
+        ).json()
 
     def stats(self, product_id: str) -> dict:
         return self.messenger.get(f"/products/{product_id}/stats").json()
@@ -157,7 +169,9 @@ class Profile(Subscriber):
         return self.messenger.put(f"/profiles/{profile_id}", data).json()
 
     def delete(self, profile_id: str, data: dict) -> dict:
-        return self.messenger.put(f"/profiles/{profile_id}/deactivate", data).json()
+        return self.messenger.put(
+            f"/profiles/{profile_id}/deactivate", data
+        ).json()
 
 
 class Report(Subscriber):
